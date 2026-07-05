@@ -110,6 +110,15 @@
 		width: 11px;
 		margin-left: 3px;
 	}
+	/* Touch devices have no hover — keep the pencil faintly visible so
+	   editable labels are discoverable at all. */
+	@media (hover: none) {
+		.editable-label .pencil-icon {
+			opacity: 0.45;
+			width: 11px;
+			margin-left: 3px;
+		}
+	}
 	.inline-label-input {
 		border: none;
 		border-bottom: 2px solid #6366f1;

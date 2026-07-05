@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
 	import { onMount, untrack } from 'svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
@@ -697,7 +697,7 @@
 		}
 		// Guard goes AFTER reading deps — otherwise Svelte won't track them on first run
 		if (!mounted) return;
-		goto(`?${u.toString()}`, { replaceState: true, keepFocus: true, noScroll: true });
+		syncQuery(u);
 	});
 
 	function cellClass(v: number): string {

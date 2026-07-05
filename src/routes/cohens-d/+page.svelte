@@ -14,6 +14,7 @@
 	import PlotDownloadButton from '$lib/components/PlotDownloadButton.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
 	import { sanitizeFilename } from '$lib/utils/downloadPlot.js';
+	import { syncQuery } from '$lib/utils/urlSync.js';
 
 	import type { Family1Inputs, Family1Results, Family1InputType, EffectDirection } from '$lib/types/effects.js';
 	import {
@@ -103,8 +104,6 @@
 
 	// ── URL sync (debounced) ─────────────────────────────────────────────────────
 
-	let urlTimer: ReturnType<typeof setTimeout>;
-
 	$effect(() => {
 		const { designType, inputType, dStr, gStr, tStr, fStr, m1Str, m2Str, sd1Str, sd2Str,
 			mDiffStr, sdDiffStr, pStr, n1Str, n2Str, nPairsStr, rPairedStr, direction, mu0Str } = inputs;
@@ -113,36 +112,31 @@
 		const _l2 = label2;
 		if (!browser) return;
 
-		clearTimeout(urlTimer);
-		urlTimer = setTimeout(() => {
-			const params = new URLSearchParams();
-			if (designType === 'paired') params.set('design', 'paired');
-			if (designType === 'one-sample') params.set('design', 'one-sample');
-			params.set('input', inputType);
-			if (dStr)       params.set('d',      dStr);
-			if (gStr)       params.set('g',      gStr);
-			if (tStr)       params.set('t',      tStr);
-			if (fStr)       params.set('f',      fStr);
-			if (m1Str)      params.set('m1',     m1Str);
-			if (m2Str)      params.set('m2',     m2Str);
-			if (sd1Str)     params.set('sd1',    sd1Str);
-			if (sd2Str)     params.set('sd2',    sd2Str);
-			if (mDiffStr)   params.set('mdiff',  mDiffStr);
-			if (sdDiffStr)  params.set('sddiff', sdDiffStr);
-			if (pStr)       params.set('p',      pStr);
-			if (n1Str)      params.set('n1',     n1Str);
-			if (n2Str)      params.set('n2',     n2Str);
-			if (nPairsStr)  params.set('np',     nPairsStr);
-			if (rPairedStr) params.set('rp',     rPairedStr);
-			if (mu0Str)     params.set('mu0',    mu0Str);
-			if (direction === -1) params.set('dir', '-1');
-			const [def1, def2] = LABEL_DEFAULTS[designType];
-			if (_l1 !== def1) params.set('label1', _l1);
-			if (_l2 !== def2) params.set('label2', _l2);
-			history.replaceState({}, '', `?${params.toString()}`);
-		}, 150);
-
-		return () => clearTimeout(urlTimer);
+		const params = new URLSearchParams();
+		if (designType === 'paired') params.set('design', 'paired');
+		if (designType === 'one-sample') params.set('design', 'one-sample');
+		params.set('input', inputType);
+		if (dStr)       params.set('d',      dStr);
+		if (gStr)       params.set('g',      gStr);
+		if (tStr)       params.set('t',      tStr);
+		if (fStr)       params.set('f',      fStr);
+		if (m1Str)      params.set('m1',     m1Str);
+		if (m2Str)      params.set('m2',     m2Str);
+		if (sd1Str)     params.set('sd1',    sd1Str);
+		if (sd2Str)     params.set('sd2',    sd2Str);
+		if (mDiffStr)   params.set('mdiff',  mDiffStr);
+		if (sdDiffStr)  params.set('sddiff', sdDiffStr);
+		if (pStr)       params.set('p',      pStr);
+		if (n1Str)      params.set('n1',     n1Str);
+		if (n2Str)      params.set('n2',     n2Str);
+		if (nPairsStr)  params.set('np',     nPairsStr);
+		if (rPairedStr) params.set('rp',     rPairedStr);
+		if (mu0Str)     params.set('mu0',    mu0Str);
+		if (direction === -1) params.set('dir', '-1');
+		const [def1, def2] = LABEL_DEFAULTS[designType];
+		if (_l1 !== def1) params.set('label1', _l1);
+		if (_l2 !== def2) params.set('label2', _l2);
+		syncQuery(params);
 	});
 
 	// ── Validation ───────────────────────────────────────────────────────────────

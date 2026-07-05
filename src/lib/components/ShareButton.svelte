@@ -3,15 +3,23 @@
 	let timer: ReturnType<typeof setTimeout> | null = null;
 
 	async function share() {
-		if (!navigator?.clipboard?.writeText) return;
+		const url = window.location.href;
 		try {
-			await navigator.clipboard.writeText(window.location.href);
-			copied = true;
-			if (timer) clearTimeout(timer);
-			timer = setTimeout(() => { copied = false; }, 2000);
+			await navigator.clipboard.writeText(url);
 		} catch {
-			// silently fail
+			// Fallback for browsers without clipboard API
+			const el = document.createElement('textarea');
+			el.value = url;
+			el.style.position = 'fixed';
+			el.style.opacity = '0';
+			document.body.appendChild(el);
+			el.select();
+			document.execCommand('copy');
+			document.body.removeChild(el);
 		}
+		copied = true;
+		if (timer) clearTimeout(timer);
+		timer = setTimeout(() => { copied = false; }, 2000);
 	}
 </script>
 

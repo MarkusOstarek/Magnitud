@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
@@ -42,14 +42,14 @@
 		const p1 = demoP1; const p2 = demoP2;
 		const e2 = demoE2;
 		if (!mounted) return;
+		// Only the active visualization's parameters belong in the share URL
 		const u = new URLSearchParams();
 		u.set('viz', viz);
-		u.set('d',  d.toFixed(2));
-		u.set('r',  r.toFixed(2));
-		u.set('p1', p1.toFixed(2));
-		u.set('p2', p2.toFixed(2));
-		u.set('e2', e2.toFixed(3));
-		goto(`?${u.toString()}`, { replaceState: true, keepFocus: true, noScroll: true });
+		if (viz === 'cohens-d')         u.set('d',  d.toFixed(2));
+		else if (viz === 'pearson-r')   u.set('r',  r.toFixed(2));
+		else if (viz === 'eta-squared') u.set('e2', e2.toFixed(3));
+		else { u.set('p1', p1.toFixed(2)); u.set('p2', p2.toFixed(2)); }
+		syncQuery(u);
 	});
 
 	onMount(() => {
@@ -57,7 +57,7 @@
 		const viz = p.get('viz') as VizType | null;
 		if (viz === 'cohens-d' || viz === 'pearson-r' || viz === 'odds-ratio' || viz === 'eta-squared')
 			activeViz = viz;
-		const d  = parseFloat(p.get('d')  ?? ''); if (!isNaN(d))  demoD  = Math.max(-3, Math.min(3, d));
+		const d  = parseFloat(p.get('d')  ?? ''); if (!isNaN(d))  demoD  = Math.max(-2, Math.min(2, d)); // slider range
 		const r  = parseFloat(p.get('r')  ?? ''); if (!isNaN(r))  demoR  = Math.max(-0.99, Math.min(0.99, r));
 		const p1 = parseFloat(p.get('p1') ?? ''); if (!isNaN(p1)) demoP1 = Math.max(0.05, Math.min(0.95, p1));
 		const p2 = parseFloat(p.get('p2') ?? ''); if (!isNaN(p2)) demoP2 = Math.max(0.05, Math.min(0.95, p2));

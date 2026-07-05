@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
@@ -467,7 +467,7 @@
 			if (inputs.dfEffStr)   u.set('dfe',   inputs.dfEffStr);
 			if (inputs.dfErrorStr) u.set('dferr', inputs.dfErrorStr);
 		}
-		goto(`?${u.toString()}`, { replaceState: true, keepFocus: true, noScroll: true });
+		syncQuery(u);
 	});
 
 	// ── Input type options ─────────────────────────────────────────

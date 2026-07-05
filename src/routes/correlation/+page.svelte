@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 
@@ -291,7 +291,7 @@
 		if (needsDir.includes(inputs.inputType) && inputs.direction === -1) u.set('dir', '-1');
 		if (labelX !== DEFAULT_LABEL_X) u.set('lx', labelX);
 		if (labelY !== DEFAULT_LABEL_Y) u.set('ly', labelY);
-		goto(`?${u.toString()}`, { replaceState: true, keepFocus: true, noScroll: true });
+		syncQuery(u);
 	});
 
 	// ── Input type options ─────────────────────────────────────────
