@@ -11,13 +11,39 @@ import { normalCDF, tInv } from './distributions.js';
 // ─── Input parsing ────────────────────────────────────────────────────────────
 
 /**
- * Parse a number from a string, accepting both decimal comma and decimal point.
+ * Parse a number from a string, accepting both decimal comma and decimal point,
+ * plus common thousands-separator styles:
+ *   "3,14" → 3.14      (single comma = decimal comma)
+ *   "1,234.56" → 1234.56 and "1.234,56" → 1234.56  (rightmost symbol = decimal)
+ *   "12,345,678" → 12345678  (repeated commas = thousands separators)
+ *   "12 345" → 12345   (spaces, incl. non-breaking, between digit groups)
  * Returns null for empty strings or invalid input.
  */
 export function parseNumber(input: string): number | null {
-	if (!input.trim()) return null;
-	const normalised = input.replace(',', '.');
-	const parsed = parseFloat(normalised);
+	let s = input.trim();
+	if (!s) return null;
+
+	// Spaces (incl. non-breaking / narrow no-break) used as thousands separators
+	s = s.replace(/(?<=\d)[\s  ]+(?=\d{3})/g, '');
+
+	const lastComma = s.lastIndexOf(',');
+	const lastDot = s.lastIndexOf('.');
+	if (lastComma !== -1 && lastDot !== -1) {
+		// Both present: the rightmost one is the decimal separator
+		s = lastComma > lastDot
+			? s.replace(/\./g, '').replace(/,/g, '.') // "1.234,56"
+			: s.replace(/,/g, ''); //                    "1,234.56"
+	} else if (lastComma !== -1) {
+		if (s.indexOf(',') !== lastComma) {
+			// Repeated commas can only be thousands separators: "12,345,678"
+			s = s.replace(/,/g, '');
+		} else {
+			// Single comma: treat as decimal comma ("3,14")
+			s = s.replace(',', '.');
+		}
+	}
+
+	const parsed = parseFloat(s);
 	return isNaN(parsed) ? null : parsed;
 }
 

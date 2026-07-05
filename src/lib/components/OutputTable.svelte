@@ -35,8 +35,9 @@
 		if (!r) return [];
 
 		const { d, g, glassDelta, r: rVal, variance, se, dCI, gCI, rCI, designType, ds } = r;
-		// Correction factor J from sample sizes (g/d ratio would be NaN at d = 0)
-		const J = designType === 'one-sample' ? hedgesJOneSample(r.n1) : hedgesJ(r.n1, r.n2);
+		// Correction factor J from sample sizes (g/d ratio would be NaN at d = 0).
+		// Paired and one-sample designs both use df = n − 1.
+		const J = designType === 'independent' ? hedgesJ(r.n1, r.n2) : hedgesJOneSample(r.n1);
 		const isPaired = designType === 'paired';
 		const isOneSample = designType === 'one-sample';
 

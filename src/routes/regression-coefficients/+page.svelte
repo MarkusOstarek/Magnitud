@@ -520,23 +520,34 @@
 			const next = groupNames[j + 1] || `G${j+2}`;
 			const prev = groupNames.slice(0, j + 1).map((n, i) => n || `G${i+1}`).join(', ');
 			if (!hasB) return { main: `β₍${j+1}₎: ${next} vs mean(${prev}).`, techNote: null };
+			// R's contr.helmert scales each contrast: b = (group − mean of previous) / k,
+			// where k = number of groups involved. The actual comparison is b × k.
+			const kH = j + 2;
+			const scaleNote = `contr.helmert scales this contrast by 1/${kH}, so the comparison uses b × ${kH}. (Contrast coefficient: b = ${bvF}.)`;
+			const expBH = Math.exp(bv! * kH);
+			const expFH = sFmt(expBH, 2);
+			const pctH = sFmt(Math.abs((expBH - 1) * 100), 1);
+			const pctAdjH = expBH > 1 ? 'higher' : 'lower';
 			if (modelType === 'linear') {
 				const dir = bv! > 0 ? 'higher' : 'lower';
-				return { main: `${next} scores ${sFmt(Math.abs(bv! * 2 / (j + 2)))} ${dir} on ${y} than the mean of (${prev}) (raw diff ≈ b × 2/(j+2)), ${caveat()}`, techNote: null };
+				return {
+					main: `${next} scores ${sFmt(Math.abs(bv! * kH))} ${dir} on ${y} than the mean of (${prev}), ${caveat()}`,
+					techNote: scaleNote
+				};
 			}
 			if (modelType === 'logistic') return {
-				main: `${next} has ${pct}% ${pctAdj} odds of ${y} compared to the mean of (${prev}), ${caveat()}`,
-				techNote: `OR: ${expF}. (Log-odds coefficient: b = ${bvF}.)`
+				main: `${next} has ${pctH}% ${pctAdjH} odds of ${y} compared to the average of (${prev}), ${caveat()}`,
+				techNote: `OR = exp(b × ${kH}) = ${expFH}. ${scaleNote}`
 			};
 			if (modelType === 'poisson' || modelType === 'negbin') return {
-				main: `The expected count of ${y} in ${next} is ${pct}% ${pctAdj} compared to the mean of (${prev}), ${caveat()}`,
-				techNote: `IRR: ${expF}. (Log-count coefficient: b = ${bvF}.)`
+				main: `The expected count of ${y} in ${next} is ${pctH}% ${pctAdjH} compared to the average of (${prev}), ${caveat()}`,
+				techNote: `IRR = exp(b × ${kH}) = ${expFH}. ${scaleNote}`
 			};
 			if (modelType === 'cox') return {
-				main: `The hazard of ${y} in ${next} is ${pct}% ${pctAdj} compared to the mean of (${prev}), ${caveat()}`,
-				techNote: `HR: ${expF}. (Log-hazard coefficient: b = ${bvF}.)`
+				main: `The hazard of ${y} in ${next} is ${pctH}% ${pctAdjH} compared to the average of (${prev}), ${caveat()}`,
+				techNote: `HR = exp(b × ${kH}) = ${expFH}. ${scaleNote}`
 			};
-			return { main: `β₍${j+1}₎ = ${sFmt(bv!)}: ${next} vs mean(${prev}); exp(b) = ${expF}.`, techNote: null };
+			return { main: `β₍${j+1}₎ = ${sFmt(bv!)}: ${next} vs mean(${prev}); the comparison uses b × ${kH} = ${sFmt(bv! * kH)}.`, techNote: scaleNote };
 		}
 
 		// sdif

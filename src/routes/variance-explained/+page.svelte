@@ -105,7 +105,8 @@
 			label: `η² = ${etaMatch[1]}` };
 
 		// ── Cohen's f ─────────────────────────────────────────────────────
-		const fSqMatch = txt.match(/(?:Cohen'?s?\s+)?f\s*=\s*(0?\.\d+)/i);
+		// Lookbehind prevents matching the "f" inside "df = ..."
+		const fSqMatch = txt.match(/(?:Cohen'?s?\s+)?(?<![a-z])f\s*=\s*(0?\.\d+)/i);
 		if (fSqMatch) return { type: 'cohensF', cohensF: fSqMatch[1],
 			label: `Cohen's f = ${fSqMatch[1]}` };
 

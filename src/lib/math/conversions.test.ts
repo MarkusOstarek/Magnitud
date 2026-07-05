@@ -49,6 +49,19 @@ describe('parseNumber', () => {
 	it('returns null for non-numeric', () => expect(parseNumber('abc')).toBeNull());
 	it('parses negative', () => expect(parseNumber('-0.5')).toBe(-0.5));
 	it('parses zero', () => expect(parseNumber('0')).toBe(0));
+
+	// Thousands separators
+	it('parses US-style thousands with decimal point', () =>
+		expect(parseNumber('1,234.56')).toBe(1234.56));
+	it('parses EU-style thousands with decimal comma', () =>
+		expect(parseNumber('1.234,56')).toBe(1234.56));
+	it('parses repeated commas as thousands separators', () =>
+		expect(parseNumber('12,345,678')).toBe(12345678));
+	it('parses space-grouped digits', () => expect(parseNumber('12 345')).toBe(12345));
+	it('parses non-breaking-space-grouped digits', () =>
+		expect(parseNumber('12 345')).toBe(12345));
+	it('still treats a single comma as a decimal comma', () =>
+		expect(parseNumber('1,23')).toBe(1.23));
 });
 
 // ── dFromMeans ────────────────────────────────────────────────────────────────

@@ -276,9 +276,9 @@
 			? dsFromDZ(dz, rPairedVal)
 			: null;
 
-		// Hedges' correction on d_z (using n pairs, df = n-1)
-		const J  = hedgesJ(n, n); // approximate: uses df = 2n-2; exact df for paired = n-1
-		const gz = hedgesG(dz, n, n);
+		// Hedges' correction on d_z (df = n − 1, matching the formula shown to the user)
+		const J  = hedgesJOneSample(n);
+		const gz = J * dz;
 		const r  = rFromD(dz, n, n);
 		const se = seDZ(dz, n);
 		const N  = 2 * n;

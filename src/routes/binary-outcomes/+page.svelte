@@ -41,6 +41,9 @@
 	let label1      = $state('Treatment');
 	let label2      = $state('Control');
 	let labelEvent  = $state('event');
+	// Whether the event is a good outcome (recovery) or a bad one (relapse).
+	// Determines NNT (benefit) vs NNH (harm) framing.
+	let eventDesirable = $state(false);
 
 	function setLabel1(v: string)     { label1     = v; }
 	function setLabel2(v: string)     { label2     = v; }
@@ -180,10 +183,19 @@
 
 	let size    = $derived(results ? sizeLabel(Math.abs(results.logOR)) : '');
 
+	// NNT vs NNH depends on both the sign of RD and whether the event is good or bad
+	let nntIsBenefit = $derived(
+		results !== null && results.rd !== 0 &&
+		(eventDesirable ? results.rd > 0 : results.rd < 0)
+	);
+	let nntLabel = $derived(
+		results === null || results.rd === 0 ? 'NNT/NNH' : nntIsBenefit ? 'NNT' : 'NNH'
+	);
+
 	let reportStr = $derived.by(() => {
 		if (!results) return '';
 		const r = results;
-		const nntPart = r.nnt !== null ? `, NNT = ${Math.ceil(r.nnt)}` : '';
+		const nntPart = r.nnt !== null ? `, ${nntLabel} = ${Math.ceil(r.nnt)}` : '';
 		return `OR = ${fmt(r.or, 2)}, 95% CI [${fmt(r.orCI[0], 2)}, ${fmt(r.orCI[1], 2)}], `
 			+ `RD = ${(r.rd * 100).toFixed(1)}%${nntPart}`;
 	});
@@ -216,7 +228,7 @@
 			`Log OR = ${fmt(res.logOR)}  SE = ${fmt(res.seLogOR)}`,
 			`Risk ratio (RR) = ${fmt(res.rr)}  95% CI ${fmtCI(res.rrCI[0], res.rrCI[1])}`,
 			`Risk difference (RD) = ${fmt(res.rd)}  95% CI ${fmtCI(res.rdCI[0], res.rdCI[1])}`,
-			res.nnt !== null ? `NNT = ${fmt(res.nnt, 1)}` : 'NNT = undefined (RD = 0)',
+			res.nnt !== null ? `${nntLabel} = ${fmt(res.nnt, 1)}` : 'NNT = undefined (RD = 0)',
 			`Phi (φ) = ${fmt(res.phi)}`
 		];
 		return lines.join('\n');
@@ -237,6 +249,7 @@
 		if (p.get('n1'))  inputs.n1Str = p.get('n1')!;
 		if (p.get('p2'))  inputs.p2Str = p.get('p2')!;
 		if (p.get('n2'))  inputs.n2Str = p.get('n2')!;
+		if (p.get('good') === '1') eventDesirable = true;
 		mounted = true;
 	});
 
@@ -255,6 +268,7 @@
 			if (inputs.p2Str) u.set('p2', inputs.p2Str);
 			if (inputs.n2Str) u.set('n2', inputs.n2Str);
 		}
+		if (eventDesirable) u.set('good', '1');
 		goto(`?${u.toString()}`, { replaceState: true, keepFocus: true, noScroll: true });
 	});
 
@@ -358,6 +372,30 @@
 					placeholder="event"
 					class="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400" />
 			</div>
+		</div>
+
+		<!-- Outcome valence: determines NNT vs NNH framing -->
+		<div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+			<span class="text-xs font-medium text-gray-700">The {labelEvent || 'event'} is</span>
+			<div class="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5 gap-0.5" role="radiogroup" aria-label="Is the outcome desirable or undesirable?">
+				<button
+					type="button"
+					role="radio"
+					aria-checked={!eventDesirable}
+					onclick={() => { eventDesirable = false; }}
+					class="rounded-md px-3 py-1 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-orange-400
+						{!eventDesirable ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
+				>undesirable <span class="font-normal text-gray-400">(e.g. relapse, death)</span></button>
+				<button
+					type="button"
+					role="radio"
+					aria-checked={eventDesirable}
+					onclick={() => { eventDesirable = true; }}
+					class="rounded-md px-3 py-1 text-xs font-medium transition-all focus:outline-none focus:ring-2 focus:ring-orange-400
+						{eventDesirable ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
+				>desirable <span class="font-normal text-gray-400">(e.g. recovery, conversion)</span></button>
+			</div>
+			<span class="text-[10px] text-gray-400">determines whether NNT (benefit) or NNH (harm) is reported</span>
 		</div>
 
 		<!-- 2×2 table input -->
@@ -524,13 +562,13 @@
 					<div class="rounded-lg bg-orange-50 border border-orange-200 px-4 py-2.5 flex items-center gap-3">
 						<div class="text-center shrink-0">
 							<div class="text-2xl font-bold text-orange-700 tabular-nums leading-none">{Math.ceil(res.nnt)}</div>
-							<div class="text-[10px] font-semibold text-orange-500 uppercase tracking-wide">{res.rd > 0 ? 'NNH' : 'NNT'}</div>
+							<div class="text-[10px] font-semibold text-orange-500 uppercase tracking-wide">{nntLabel}</div>
 						</div>
 						<p class="text-sm text-orange-900 leading-snug">
 							{#if res.rd > 0}
-								For every <strong>{Math.ceil(res.nnt)}</strong> people given {label1} instead of {label2}, one additional {labelEvent} is expected.
+								For every <strong>{Math.ceil(res.nnt)}</strong> people given {label1} instead of {label2}, one additional {labelEvent} is expected{nntIsBenefit ? '' : ' — a harm'}.
 							{:else}
-								You would need to give <strong>{Math.ceil(res.nnt)}</strong> people {label1} instead of {label2} to prevent one {labelEvent}.
+								For every <strong>{Math.ceil(res.nnt)}</strong> people given {label1} instead of {label2}, one {labelEvent} is {nntIsBenefit ? 'prevented' : 'lost'}.
 							{/if}
 						</p>
 					</div>
@@ -570,10 +608,10 @@
 					{#if res.nnt !== null}
 						{#if res.rd > 0}
 							For every <strong>{Math.ceil(res.nnt)}</strong> people treated with {label1} instead
-							of {label2}, one additional case of {labelEvent} would be expected (NNH = {Math.ceil(res.nnt)}).
+							of {label2}, one additional case of {labelEvent} would be expected ({nntLabel} = {Math.ceil(res.nnt)}).
 						{:else}
 							You would need to treat <strong>{Math.ceil(res.nnt)}</strong> people with {label1}
-							(instead of {label2}) to prevent one additional case of {labelEvent} (NNT = {Math.ceil(res.nnt)}).
+							(instead of {label2}) to {nntIsBenefit ? 'prevent one' : 'see one fewer'} case of {labelEvent} ({nntLabel} = {Math.ceil(res.nnt)}).
 						{/if}
 					{:else}
 						Risk difference is zero — NNT is undefined.
@@ -659,9 +697,9 @@
 					<!-- NNT -->
 					<tr class="hover:bg-gray-50/50">
 						<td class="px-5 py-3 text-gray-700 font-medium">
-							{res.rd < 0 ? 'NNT' : res.rd > 0 ? 'NNH' : 'NNT/NNH'}
+							{nntLabel}
 							<span class="ml-1 text-xs font-normal text-gray-400">
-								{res.rd < 0 ? '(beneficial)' : res.rd > 0 ? '(harmful)' : ''}
+								{res.rd === 0 ? '' : nntIsBenefit ? '(beneficial)' : '(harmful)'}
 							</span>
 						</td>
 						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">

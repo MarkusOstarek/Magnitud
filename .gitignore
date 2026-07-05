@@ -6,3 +6,8 @@ build
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Local working notes (not for publishing)
+effect-size-tool-*.md
+magnitud-*.md
+fix_improvements.py
