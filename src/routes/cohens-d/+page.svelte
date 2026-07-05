@@ -163,9 +163,15 @@
 		)
 	);
 
+	// "Required" only means the field is still empty — don't paint a pristine
+	// form red. Empty fields silently block results; only real errors display.
 	let errorMap = $derived(
-		Object.fromEntries(validationErrors.map(e => [e.field, e.message]))
+		Object.fromEntries(
+			validationErrors.filter(e => e.message !== 'Required').map(e => [e.field, e.message])
+		)
 	);
+
+	let missingFields = $derived(validationErrors.some(e => e.message === 'Required'));
 
 	// ── Computed results ─────────────────────────────────────────────────────────
 
@@ -657,6 +663,9 @@
 			{/if}
 		</div>
 			<InputPanel bind:inputs errors={errorMap} {label1} {label2} onlabel1change={setLabel1} onlabel2change={setLabel2} />
+			{#if !results && missingFields}
+				<p class="mt-4 text-xs text-gray-400">Results appear once all fields above are filled in.</p>
+			{/if}
 		</div>
 	</section>
 
@@ -670,8 +679,15 @@
 	<!-- ── Distribution plot ── -->
 	<section aria-labelledby="viz-heading">
 		<h2 id="viz-heading" class="section-title mb-3">Overlapping distributions</h2>
-		<div class="card overflow-hidden">
+		<div class="card overflow-hidden relative">
 			<DistributionPlot bind:svgEl={distSvgEl} d={results?.d ?? 0.5} height={280} {label1} {label2} editable={true} onlabel1change={setLabel1} onlabel2change={setLabel2} />
+			{#if !results}
+				<div class="absolute inset-x-0 top-3 flex justify-center pointer-events-none">
+					<span class="rounded-full bg-white/90 border border-gray-200 px-3 py-1 text-xs font-medium text-gray-500 shadow-sm">
+						Example (d = 0.5) — enter your values above to see your effect
+					</span>
+				</div>
+			{/if}
 			{#if results && distSvgEl}
 				<div class="flex justify-end px-4 pb-3">
 					<PlotDownloadButton getSvg={() => distSvgEl} filename={distPlotFilename} />

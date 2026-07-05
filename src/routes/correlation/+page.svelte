@@ -551,6 +551,12 @@
 		<BenchmarkRibbon value={results?.r ?? null} metric="Pearson's r" family="r" />
 	</div>
 
+	{#if !results}
+		<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-5 py-10 text-center text-sm text-gray-400">
+			The interpretation and results table will appear here once you enter a value and a sample size above.
+		</div>
+	{/if}
+
 	<!-- ── Interpretation ─────────────────────────────────────────── -->
 	{#if results}
 		{@const res = results}
@@ -743,7 +749,10 @@
 				<tbody class="divide-y divide-gray-50">
 					<tr class="hover:bg-gray-50/50">
 						<td class="px-5 py-3 text-gray-700 font-medium">Pearson's r</td>
-						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">{fmt(res.r, 4)}</td>
+						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">
+							{fmt(res.r, 4)}
+							<span class="block sm:hidden text-xs font-normal text-gray-400">95% CI {fmtCI(res.rCI)}</span>
+						</td>
 						<td class="px-5 py-3 text-right tabular-nums text-gray-500 hidden sm:table-cell">{fmtCI(res.rCI)}</td>
 						<td class="px-3 py-3 text-right"><CopyButton text={fmt(res.r, 4)} /></td>
 					</tr>

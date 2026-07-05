@@ -1017,6 +1017,10 @@
 			<FormulaAccordion formulas={formulas} />
 		</div>
 	{:else}
+		<div class="rounded-2xl border border-dashed border-gray-200 bg-gray-50 px-5 py-10 text-center text-sm text-gray-400">
+			Results, the variance plot, and the interpretation will appear here once you enter values above.
+		</div>
+
 		<!-- Formulas shown even without results -->
 		<div class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
 			<FormulaAccordion formulas={formulas} />

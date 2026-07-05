@@ -660,7 +660,10 @@
 					<!-- OR -->
 					<tr class="hover:bg-gray-50/50">
 						<td class="px-5 py-3 text-gray-700 font-medium">Odds ratio (OR)</td>
-						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">{fmt(res.or)}</td>
+						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">
+							{fmt(res.or)}
+							<span class="block sm:hidden text-xs font-normal text-gray-400">95% CI {fmtCI(res.orCI[0], res.orCI[1])}</span>
+						</td>
 						<td class="px-5 py-3 text-right tabular-nums text-gray-500 hidden sm:table-cell">{fmtCI(res.orCI[0], res.orCI[1])}</td>
 						<td class="px-3 py-3 text-right"><CopyButton text={fmt(res.or)} /></td>
 					</tr>
@@ -680,14 +683,20 @@
 					<!-- RR -->
 					<tr class="hover:bg-gray-50/50">
 						<td class="px-5 py-3 text-gray-700 font-medium">Risk ratio (RR)</td>
-						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">{fmt(res.rr)}</td>
+						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">
+							{fmt(res.rr)}
+							<span class="block sm:hidden text-xs font-normal text-gray-400">95% CI {fmtCI(res.rrCI[0], res.rrCI[1])}</span>
+						</td>
 						<td class="px-5 py-3 text-right tabular-nums text-gray-500 hidden sm:table-cell">{fmtCI(res.rrCI[0], res.rrCI[1])}</td>
 						<td class="px-3 py-3 text-right"><CopyButton text={fmt(res.rr)} /></td>
 					</tr>
 					<!-- RD -->
 					<tr class="hover:bg-gray-50/50">
 						<td class="px-5 py-3 text-gray-700 font-medium">Risk difference (RD)</td>
-						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">{fmt(res.rd)}</td>
+						<td class="px-5 py-3 text-right tabular-nums font-semibold text-gray-900">
+							{fmt(res.rd)}
+							<span class="block sm:hidden text-xs font-normal text-gray-400">95% CI {fmtCI(res.rdCI[0], res.rdCI[1])}</span>
+						</td>
 						<td class="px-5 py-3 text-right tabular-nums text-gray-500 hidden sm:table-cell">
 							{fmtCI(res.rdCI[0], res.rdCI[1])}
 							<span class="text-gray-400 text-xs ml-1">SE = {fmt(res.seRD)}</span>
