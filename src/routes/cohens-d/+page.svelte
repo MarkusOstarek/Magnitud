@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
@@ -589,13 +590,11 @@
 	});
 </script>
 
-<svelte:head>
-	<title>Cohen's d calculator | Magnitood</title>
-	<meta
-		name="description"
-		content="Calculate Cohen's d, Hedges' g, and related effect sizes from t-statistics, F-statistics, means and SDs, or p-values. Includes 95% CI, visualisation, and plain-language interpretation."
-	/>
-</svelte:head>
+<Seo
+	title="Cohen's d calculator | Magnitood"
+	description="Calculate Cohen's d, Hedges' g, and related effect sizes from t-statistics, F-statistics, means and SDs, or p-values. Includes 95% CI, visualisation, and plain-language interpretation."
+	path="/cohens-d"
+/>
 
 <!-- Family 1 top-bar accent -->
 <div class="h-1 bg-gradient-to-r from-blue-400 to-indigo-500"></div>

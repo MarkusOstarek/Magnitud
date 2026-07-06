@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { base } from '$app/paths';
 	import DistributionPlot from '$lib/components/DistributionPlot.svelte';
 	let demoD = $state(0.5);
@@ -62,9 +63,13 @@
 	];
 </script>
 
+<Seo
+	title="Magnitood: Effect size calculator and interpreter"
+	description="Calculate, convert, and interpret statistical effect sizes. Cohen's d, Hedges' g, odds ratio, eta-squared, and more. Free online tool with visualisations and plain-language explanations."
+/>
+
 <svelte:head>
-	<title>Magnitood: Effect size calculator and interpreter</title>
-	<meta name="description" content="Calculate, convert, and interpret statistical effect sizes. Cohen's d, Hedges' g, odds ratio, eta-squared, and more. Free online tool with visualisations and plain-language explanations." />
+
 	<script type="application/ld+json">
 		{JSON.stringify({
 			"@context": "https://schema.org",

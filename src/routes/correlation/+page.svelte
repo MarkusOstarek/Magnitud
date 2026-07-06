@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { page } from '$app/stores';
 	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
@@ -349,10 +350,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Correlation effect sizes: r, R², Fisher's z | Magnitood</title>
-	<meta name="description" content="Convert and interpret Pearson's r, R², and Fisher's z. Input from t-statistics, p-values, chi-square, or regression slopes. Free, instant, client-side." />
-</svelte:head>
+<Seo
+	title="Correlation effect sizes: r, R², Fisher's z | Magnitood"
+	description="Convert and interpret Pearson's r, R², and Fisher's z. Input from t-statistics, p-values, chi-square, or regression slopes. Free, instant, client-side."
+	path="/correlation"
+/>
 
 <!-- Accent bar -->
 <div class="h-1 bg-gradient-to-r from-violet-400 to-purple-500"></div>

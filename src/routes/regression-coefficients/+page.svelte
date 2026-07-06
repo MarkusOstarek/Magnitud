@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { page } from '$app/stores';
 	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
@@ -707,10 +708,11 @@
 	}
 </script>
 
-<svelte:head>
-	<title>Coefficient Interpreter — explain your regression results | Magnitood</title>
-	<meta name="description" content="Interactive guide to interpreting regression coefficients for any model type (OLS, logistic, Poisson, Cox) and any coding scheme (dummy, effects, Helmert). Generates plain-English interpretation, OR/HR/IRR, and APA-style reporting." />
-</svelte:head>
+<Seo
+	title="Coefficient Interpreter — explain your regression results | Magnitood"
+	description="Interactive guide to interpreting regression coefficients for any model type (OLS, logistic, Poisson, Cox) and any coding scheme (dummy, effects, Helmert). Generates plain-English interpretation, OR/HR/IRR, and APA-style reporting."
+	path="/regression-coefficients"
+/>
 
 <div style="background-color: #fefdf9; min-height: 100vh;">
 <div class="h-1 bg-gradient-to-r from-teal-500 via-cyan-400 to-teal-400"></div>

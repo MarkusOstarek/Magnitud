@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { page } from '$app/stores';
 	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
@@ -312,10 +313,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Risk & Odds: odds ratio, NNT, risk ratio | Magnitood</title>
-	<meta name="description" content="Compute odds ratio, risk ratio, risk difference, NNT, and phi from 2×2 tables or two proportions. With 95% CIs. Free, instant, client-side." />
-</svelte:head>
+<Seo
+	title="Risk & Odds: odds ratio, NNT, risk ratio | Magnitood"
+	description="Compute odds ratio, risk ratio, risk difference, NNT, and phi from 2×2 tables or two proportions. With 95% CIs. Free, instant, client-side."
+	path="/binary-outcomes"
+/>
 
 <div class="h-1 bg-gradient-to-r from-orange-400 to-red-400"></div>
 

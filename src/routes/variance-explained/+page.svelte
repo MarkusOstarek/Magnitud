@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { page } from '$app/stores';
 	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { base } from '$app/paths';
@@ -521,10 +522,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>ANOVA / Regression: η², ω², Cohen's f | Magnitood</title>
-	<meta name="description" content="Compute η², partial η², ω² and Cohen's f from ANOVA F-statistics or SS values. With 95% CIs via the noncentral F method. Free, instant, client-side." />
-</svelte:head>
+<Seo
+	title="ANOVA / Regression: η², ω², Cohen's f | Magnitood"
+	description="Compute η², partial η², ω² and Cohen's f from ANOVA F-statistics or SS values. With 95% CIs via the noncentral F method. Free, instant, client-side."
+	path="/variance-explained"
+/>
 
 <div class="h-1 bg-gradient-to-r from-emerald-400 to-teal-500"></div>
 

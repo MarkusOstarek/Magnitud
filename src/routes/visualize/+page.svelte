@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { syncQuery } from '$lib/utils/urlSync.js';
 	import { page } from '$app/stores';
 	import { base } from '$app/paths';
@@ -144,10 +145,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>Effect Size Visualizer — Magnitood</title>
-	<meta name="description" content="Interactively visualise Cohen's d, Pearson's r, Odds Ratio, and Eta-squared. Drag the sliders to see what different effect sizes look like." />
-</svelte:head>
+<Seo
+	title="Effect Size Visualizer — Magnitood"
+	description="Interactively visualise Cohen's d, Pearson's r, Odds Ratio, and Eta-squared. Drag the sliders to see what different effect sizes look like."
+	path="/visualize"
+/>
 
 <div class="mx-auto max-w-3xl px-4 py-10 space-y-6">
 

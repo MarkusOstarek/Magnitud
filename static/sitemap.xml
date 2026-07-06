@@ -26,6 +26,16 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://markusostarek.github.io/Magnitud/regression-coefficients</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://markusostarek.github.io/Magnitud/visualize</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://markusostarek.github.io/Magnitud/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

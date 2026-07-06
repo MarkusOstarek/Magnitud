@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	// Test cases for validation table (computed against R metafor::escalc)
 	const testCases = [
 		{
@@ -25,10 +26,11 @@
 	];
 </script>
 
-<svelte:head>
-	<title>About Magnitood: effect size calculator</title>
-	<meta name="description" content="About Magnitood: methodology, validation, how to cite, and contact information." />
-</svelte:head>
+<Seo
+	title="About Magnitood: effect size calculator"
+	description="About Magnitood: methodology, validation, how to cite, and how to reach the author."
+	path="/about"
+/>
 
 <div class="mx-auto max-w-3xl px-4 py-12 space-y-10">
 
@@ -84,6 +86,16 @@
 				</tbody>
 			</table>
 		</div>
+	</section>
+
+	<section>
+		<h2 class="text-xl font-semibold text-gray-900 mb-3">Contact &amp; feedback</h2>
+		<p class="text-gray-600 leading-relaxed">
+			Found a bug, a formula that disagrees with your software, or a feature you'd like to see?
+			Please open an issue on
+			<a href="https://github.com/MarkusOstarek/Magnitud/issues" class="text-accent underline" target="_blank" rel="noopener noreferrer">GitHub</a>
+			— reports about statistical correctness are especially welcome.
+		</p>
 	</section>
 
 	<section>
