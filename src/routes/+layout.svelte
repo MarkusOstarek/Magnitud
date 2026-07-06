@@ -28,6 +28,43 @@
 	// Citation modal state
 	let citeOpen    = $state(false);
 	let copiedFormat = $state<string | null>(null);
+	let dialogEl    = $state<HTMLDivElement>();
+	let lastFocused: HTMLElement | null = null;
+
+	// While the modal is open: lock body scroll, move focus into the dialog,
+	// and restore focus to the trigger on close.
+	$effect(() => {
+		if (!citeOpen) return;
+		lastFocused = document.activeElement as HTMLElement | null;
+		document.body.style.overflow = 'hidden';
+		queueMicrotask(() => dialogEl?.focus());
+		return () => {
+			document.body.style.overflow = '';
+			lastFocused?.focus();
+		};
+	});
+
+	function onModalKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			citeOpen = false;
+			return;
+		}
+		// Keep Tab cycling inside the dialog
+		if (e.key !== 'Tab' || !dialogEl) return;
+		const focusables = dialogEl.querySelectorAll<HTMLElement>(
+			'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+		);
+		if (focusables.length === 0) return;
+		const first = focusables[0];
+		const last = focusables[focusables.length - 1];
+		if (e.shiftKey && (document.activeElement === first || document.activeElement === dialogEl)) {
+			e.preventDefault();
+			last.focus();
+		} else if (!e.shiftKey && document.activeElement === last) {
+			e.preventDefault();
+			first.focus();
+		}
+	}
 
 	const domain = 'https://markusostarek.github.io/Magnitud';
 
@@ -228,6 +265,8 @@
 	</footer>
 </div>
 
+<svelte:window onkeydown={(e) => { if (citeOpen && e.key === 'Escape') citeOpen = false; }} />
+
 <!-- Citation modal -->
 {#if citeOpen}
 	<div
@@ -238,7 +277,10 @@
 	></div>
 
 	<div
-		class="fixed inset-x-4 top-1/2 z-50 -translate-y-1/2 mx-auto max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
+		bind:this={dialogEl}
+		tabindex="-1"
+		onkeydown={onModalKeydown}
+		class="fixed inset-x-4 top-1/2 z-50 -translate-y-1/2 mx-auto max-w-lg rounded-2xl bg-white p-6 shadow-2xl focus:outline-none"
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="cite-title"

@@ -197,6 +197,10 @@
 	let powerN   = $state<80 | 90 | 95>(80);
 	let powerMDE = $state<80 | 90 | 95>(80);
 
+	// Accordion state (cross-family conversions, references)
+	let crossOpen = $state(false);
+	let refsOpen  = $state(false);
+
 	function nRequiredR(absRval: number, power: number): number | null {
 		if (absRval < 0.001) return null;
 		const z = Z_ALPHA + Z_BETA[power];
@@ -375,6 +379,7 @@
 					<button
 						type="button"
 						onclick={() => { inputs.inputType = opt.value; }}
+						aria-pressed={inputs.inputType === opt.value}
 						class="rounded-full border px-3.5 py-1 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-accent
 							{inputs.inputType === opt.value
 								? 'border-violet-500 bg-violet-50 text-violet-700'
@@ -502,6 +507,7 @@
 					<button
 						type="button"
 						onclick={() => { inputs.direction = 1; }}
+						aria-pressed={inputs.direction === 1}
 						class="rounded-md px-4 py-1.5 text-sm font-medium transition-all focus:outline-none
 							{inputs.direction === 1 ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 					>
@@ -510,6 +516,7 @@
 					<button
 						type="button"
 						onclick={() => { inputs.direction = -1; }}
+						aria-pressed={inputs.direction === -1}
 						class="rounded-md px-4 py-1.5 text-sm font-medium transition-all focus:outline-none
 							{inputs.direction === -1 ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 					>
@@ -623,6 +630,7 @@
 								<div class="inline-flex rounded-md border border-gray-200 bg-gray-50 p-0.5 gap-0.5">
 									{#each POWERS as pw}
 										<button type="button" onclick={() => { powerN = pw; }}
+											aria-pressed={powerN === pw}
 											class="rounded px-2.5 py-1 text-xs font-medium transition-all focus:outline-none
 												{powerN === pw ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 										>{pw}%</button>
@@ -695,6 +703,7 @@
 								<div class="inline-flex rounded-md border border-gray-200 bg-gray-50 p-0.5 gap-0.5">
 									{#each POWERS as pw}
 										<button type="button" onclick={() => { powerMDE = pw; }}
+											aria-pressed={powerMDE === pw}
 											class="rounded px-2.5 py-1 text-xs font-medium transition-all focus:outline-none
 												{powerMDE === pw ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 										>{pw}%</button>
@@ -803,20 +812,16 @@
 			<button
 				type="button"
 				class="w-full flex items-center justify-between px-5 py-3.5 text-left bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent"
-				onclick={(e) => {
-					const panel = (e.currentTarget as HTMLElement).nextElementSibling as HTMLElement;
-					panel.hidden = !panel.hidden;
-					e.currentTarget.setAttribute('aria-expanded', String(!panel.hidden));
-				}}
-				aria-expanded="false"
+				onclick={() => { crossOpen = !crossOpen; }}
+				aria-expanded={crossOpen}
 			>
 				<span class="text-sm font-semibold text-gray-700">Cross-family conversions</span>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-					class="w-4 h-4 text-gray-400" aria-hidden="true">
+					class="w-4 h-4 text-gray-400 transition-transform duration-200 {crossOpen ? 'rotate-180' : ''}" aria-hidden="true">
 					<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
 				</svg>
 			</button>
-			<div hidden>
+			<div hidden={!crossOpen}>
 				<div class="px-5 py-4 space-y-3">
 					<div class="flex items-baseline justify-between gap-4 text-sm">
 						<span class="text-gray-600">
@@ -863,20 +868,16 @@
 		<button
 			type="button"
 			class="w-full flex items-center justify-between px-5 py-3.5 text-left bg-gray-50 hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-accent"
-			onclick={(e) => {
-				const panel = (e.currentTarget as HTMLElement).nextElementSibling as HTMLElement;
-				panel.hidden = !panel.hidden;
-				e.currentTarget.setAttribute('aria-expanded', String(!panel.hidden));
-			}}
-			aria-expanded="false"
+			onclick={() => { refsOpen = !refsOpen; }}
+			aria-expanded={refsOpen}
 		>
 			<span class="text-sm font-semibold text-gray-700">References</span>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-				class="w-4 h-4 text-gray-400" aria-hidden="true">
+				class="w-4 h-4 text-gray-400 transition-transform duration-200 {refsOpen ? 'rotate-180' : ''}" aria-hidden="true">
 				<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
 			</svg>
 		</button>
-		<div hidden>
+		<div hidden={!refsOpen}>
 			<ul class="px-5 py-4 space-y-2 text-xs text-gray-600 leading-relaxed list-none">
 				<li>Borenstein, M., Hedges, L. V., Higgins, J. P. T., &amp; Rothstein, H. R. (2009). <em>Introduction to meta-analysis.</em> Wiley.</li>
 				<li>Cohen, J. (1988). <em>Statistical power analysis for the behavioral sciences</em> (2nd ed.). Lawrence Erlbaum.</li>

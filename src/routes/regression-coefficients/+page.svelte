@@ -746,6 +746,7 @@
 				{#each ([['observational', 'Observational'], ['experimental', 'Experimental / RCT']] as const) as [v, lbl]}
 					<button
 						onclick={() => { study = v; }}
+						aria-pressed={study === v}
 						class="flex-1 rounded-lg border-2 px-3 py-2 text-sm font-medium transition-colors text-left
 							{study === v ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-gray-200 text-gray-600 hover:border-gray-300'}"
 					>{lbl}</button>
@@ -767,6 +768,7 @@
 				{#each ([['continuous', 'Continuous (numeric)'], ['categorical', 'Categorical (groups / dummies)']] as const) as [v, lbl]}
 					<button
 						onclick={() => { predType = v; }}
+						aria-pressed={predType === v}
 						class="flex-1 rounded-xl border-2 px-4 py-2.5 text-sm font-medium transition-colors text-left
 							{predType === v ? 'border-teal-500 bg-teal-50 text-teal-800' : 'border-gray-200 text-gray-600 hover:border-gray-300'}"
 					>{lbl}</button>
@@ -782,6 +784,7 @@
 			{#each Object.entries(modelDescriptions) as [mt, info]}
 				<button
 					onclick={() => { modelType = mt as ModelType; }}
+					aria-pressed={modelType === mt}
 					class="rounded-xl border-2 px-3 py-2.5 text-left transition-colors
 						{modelType === mt ? 'border-teal-500 bg-teal-50' : 'border-gray-200 hover:border-gray-300'}"
 				>
@@ -836,6 +839,7 @@
 					<div class="flex flex-wrap gap-2">
 						{#each ([['raw', 'Raw / original units'], ['std', 'Standardized (z-score)'], ['log', 'Log-transformed  ln(X)']] as const) as [s, lbl]}
 							<button onclick={() => { scaleX = s; }}
+								aria-pressed={scaleX === s}
 								class="rounded-full px-3 py-1 text-sm font-medium transition-colors
 									{scaleX === s ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}"
 							>{lbl}</button>
@@ -1080,6 +1084,7 @@
 					}}
 					<button
 						onclick={() => { scheme = s as Scheme; }}
+						aria-pressed={scheme === s}
 						class="rounded-xl border-2 px-3 py-2.5 text-left transition-colors
 							{scheme === s ? 'border-teal-500 bg-teal-50' : 'border-gray-200 hover:border-gray-300'}"
 					>

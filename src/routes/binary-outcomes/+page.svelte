@@ -341,6 +341,7 @@
 				{#each inputOptions as opt}
 					<button
 						onclick={() => { inputs.inputType = opt.value; }}
+						aria-pressed={inputs.inputType === opt.value}
 						class="rounded-full px-3 py-1 text-sm font-medium transition-colors
 							{inputs.inputType === opt.value
 								? 'bg-orange-500 text-white'

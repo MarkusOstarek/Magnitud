@@ -145,6 +145,7 @@
 							<button
 								type="button"
 								onclick={() => { powerMDE = pw; }}
+								aria-pressed={powerMDE === pw}
 								class="rounded px-2.5 py-1 text-xs font-medium transition-all focus:outline-none
 									{powerMDE === pw ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 							>{pw}%</button>

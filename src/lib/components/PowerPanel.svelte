@@ -104,6 +104,7 @@
 								<button
 									type="button"
 									onclick={() => { powerN = p; }}
+									aria-pressed={powerN === p}
 									class="rounded px-2.5 py-1 text-xs font-medium transition-all focus:outline-none
 										{powerN === p ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 								>{p}%</button>
@@ -186,6 +187,7 @@
 								<button
 									type="button"
 									onclick={() => { powerMDE = p; }}
+									aria-pressed={powerMDE === p}
 									class="rounded px-2.5 py-1 text-xs font-medium transition-all focus:outline-none
 										{powerMDE === p ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}"
 								>{p}%</button>
