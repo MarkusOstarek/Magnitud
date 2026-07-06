@@ -591,7 +591,7 @@
 					</div>
 					<div class="px-3">
 						<p class="text-xs text-gray-400 mb-0.5">95% CI</p>
-						<p class="text-lg font-bold text-gray-900 text-base">[{fmt(res.rCI[0], 2)}, {fmt(res.rCI[1], 2)}]</p>
+						<p class="text-lg font-bold text-gray-900">[{fmt(res.rCI[0], 2)}, {fmt(res.rCI[1], 2)}]</p>
 						<p class="text-xs text-gray-400">for r</p>
 					</div>
 				</div>

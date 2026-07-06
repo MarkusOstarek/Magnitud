@@ -714,7 +714,6 @@
 	path="/regression-coefficients"
 />
 
-<div style="background-color: #fefdf9; min-height: 100vh;">
 <div class="h-1 bg-gradient-to-r from-teal-500 via-cyan-400 to-teal-400"></div>
 
 <div class="mx-auto max-w-3xl px-4 py-10 space-y-6">
@@ -1407,4 +1406,3 @@ Group2      -1.2   1.1   .277</pre>
 	</div>
 
 </div><!-- /max-w-3xl -->
-</div><!-- /background -->

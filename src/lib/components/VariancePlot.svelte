@@ -52,7 +52,7 @@
 	viewBox="0 0 500 193"
 	preserveAspectRatio="xMidYMid meet"
 	role="img"
-	aria-label="Variance explained waffle chart — each of 100 squares represents 1% of total variance"
+	aria-label="Variance explained waffle chart — each of 100 dots represents 1% of total variance"
 	style="display: block;"
 >
 	<!-- Background -->

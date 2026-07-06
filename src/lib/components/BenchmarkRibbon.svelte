@@ -104,6 +104,15 @@
 		dBenchmarkSets[selectedDKey]
 	);
 
+	// Ribbon gradient tinted to match each family's page accent
+	const GRADIENTS: Record<'d' | 'r' | 'f' | 'or', [string, string, string, string, string]> = {
+		d:  ['#e0e7ff', '#a5b4fc', '#818cf8', '#4f46e5', '#3730a3'], // indigo
+		r:  ['#ede9fe', '#c4b5fd', '#a78bfa', '#7c3aed', '#5b21b6'], // violet
+		f:  ['#d1fae5', '#6ee7b7', '#34d399', '#059669', '#065f46'], // emerald
+		or: ['#ffedd5', '#fdba74', '#fb923c', '#ea580c', '#9a3412']  // orange
+	};
+	let grad = $derived(GRADIENTS[family]);
+
 	let absVal = $derived(value !== null ? Math.abs(value) : null);
 	let ribbonMax = $derived(set.thresholds.large * 1.6);
 	let markerPct = $derived(
@@ -174,7 +183,7 @@
 	</div>
 
 	<!-- Gradient ribbon -->
-	<div class="relative h-10 rounded-full overflow-hidden" style="background: linear-gradient(to right, #e0e7ff 0%, #a5b4fc {pctOf(set.thresholds.small)}%, #818cf8 {pctOf(set.thresholds.medium)}%, #4f46e5 {pctOf(set.thresholds.large)}%, #3730a3 100%);">
+	<div class="relative h-10 rounded-full overflow-hidden" style="background: linear-gradient(to right, {grad[0]} 0%, {grad[1]} {pctOf(set.thresholds.small)}%, {grad[2]} {pctOf(set.thresholds.medium)}%, {grad[3]} {pctOf(set.thresholds.large)}%, {grad[4]} 100%);">
 
 		<!-- Threshold ticks -->
 		{#each [{ v: set.thresholds.small, lbl: 'Small' }, { v: set.thresholds.medium, lbl: 'Medium' }, { v: set.thresholds.large, lbl: 'Large' }] as tick}

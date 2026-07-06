@@ -911,7 +911,7 @@
 				bind:svgEl={varSvgEl}
 			/>
 			<p class="mt-2 text-xs text-gray-400 text-center">
-				Each square represents 1% of total variance.
+				Each dot represents 1% of total variance.
 			</p>
 		</div>
 
