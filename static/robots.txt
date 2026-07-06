@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://markusostarek.github.io/Magnitud/sitemap.xml

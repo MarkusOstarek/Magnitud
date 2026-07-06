@@ -6,10 +6,11 @@
 		path?: string;
 	}
 
+	import { SITE_URL, SITE_NAME } from '$lib/site.js';
+
 	let { title, description, path = '' }: Props = $props();
 
-	const SITE = 'https://markusostarek.github.io/Magnitud';
-	let url = $derived(path ? `${SITE}${path}` : `${SITE}/`);
+	let url = $derived(path ? `${SITE_URL}${path}` : `${SITE_URL}/`);
 </script>
 
 <svelte:head>
@@ -17,7 +18,7 @@
 	<meta name="description" content={description} />
 	<link rel="canonical" href={url} />
 	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="Magnitood" />
+	<meta property="og:site_name" content={SITE_NAME} />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
 	<meta property="og:url" content={url} />

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { base } from '$app/paths';
+	import { SITE_URL, REPO_URL } from '$lib/site.js';
 	import { page } from '$app/stores';
 	import type { Snippet } from 'svelte';
 
@@ -66,7 +67,7 @@
 		}
 	}
 
-	const domain = 'https://markusostarek.github.io/Magnitud';
+	const domain = SITE_URL;
 
 	const citations = {
 		apa:    `Ostarek, M. (2026). Magnitood: Effect size calculator and interpreter. Retrieved from ${domain}`,
@@ -250,7 +251,7 @@
 					>Cite this tool</button>
 					<a href="{base}/about" class="hover:text-gray-900 transition-colors">About</a>
 					<a
-						href="https://github.com/MarkusOstarek/Magnitud"
+						href={REPO_URL}
 						target="_blank"
 						rel="noopener noreferrer"
 						class="hover:text-gray-900 transition-colors"

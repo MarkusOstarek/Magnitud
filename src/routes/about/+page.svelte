@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
+	import { REPO_URL } from '$lib/site.js';
 	// Test cases for validation table (computed against R metafor::escalc)
 	const testCases = [
 		{
@@ -51,7 +52,7 @@
 		<h2 class="text-xl font-semibold text-gray-900 mb-3">Who made it</h2>
 		<p class="text-gray-600 leading-relaxed">
 			Markus Ostarek. Built in 2026 as an open tool for the research community.
-			Source code is on <a href="https://github.com/MarkusOstarek/Magnitud" class="text-accent underline" target="_blank" rel="noopener noreferrer">GitHub</a>.
+			Source code is on <a href={REPO_URL} class="text-accent underline" target="_blank" rel="noopener noreferrer">GitHub</a>.
 		</p>
 	</section>
 
@@ -93,7 +94,7 @@
 		<p class="text-gray-600 leading-relaxed">
 			Found a bug, a formula that disagrees with your software, or a feature you'd like to see?
 			Please open an issue on
-			<a href="https://github.com/MarkusOstarek/Magnitud/issues" class="text-accent underline" target="_blank" rel="noopener noreferrer">GitHub</a>
+			<a href="{REPO_URL}/issues" class="text-accent underline" target="_blank" rel="noopener noreferrer">GitHub</a>
 			— reports about statistical correctness are especially welcome.
 		</p>
 	</section>

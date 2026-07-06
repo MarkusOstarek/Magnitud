@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Seo from '$lib/components/Seo.svelte';
 	import { base } from '$app/paths';
+	import { SITE_URL } from '$lib/site.js';
 	import DistributionPlot from '$lib/components/DistributionPlot.svelte';
 	let demoD = $state(0.5);
 
@@ -76,7 +77,7 @@
 			"@type": "WebApplication",
 			"name": "Magnitood",
 			"description": "Effect size calculator and interpreter for researchers and students",
-			"url": "https://markusostarek.github.io/Magnitud/",
+			"url": SITE_URL + "/",
 			"applicationCategory": "EducationalApplication",
 			"author": {
 				"@type": "Person",
